@@ -9,8 +9,9 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
+    libpq-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install zip gd
+    && docker-php-ext-install zip gd pdo_pgsql pgsql
 
 COPY . .
 
@@ -18,8 +19,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN composer install --no-dev --optimize-autoloader
 
-RUN php artisan key:generate
-RUN php artisan migrate --force
 RUN php artisan storage:link
 
 EXPOSE 10000
