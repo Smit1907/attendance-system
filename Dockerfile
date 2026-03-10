@@ -19,6 +19,14 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN composer install --no-dev --optimize-autoloader
 
+# Laravel optimizations
+RUN php artisan config:clear
+RUN php artisan cache:clear
+
+# Run database migrations
+RUN php artisan migrate --force
+
+# Storage link
 RUN php artisan storage:link
 
 EXPOSE 10000
